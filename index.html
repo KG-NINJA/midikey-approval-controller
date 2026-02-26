@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MIDI-Approval-Controller</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0f1115;
+      --panel: #1a1f2b;
+      --muted: #9ca3af;
+      --text: #f3f4f6;
+      --green: #16a34a;
+      --red: #dc2626;
+      --gray: #4b5563;
+      --border: #2c3446;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .container {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 24px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 30px;
+      letter-spacing: 0.4px;
+    }
+
+    .subtitle {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+    }
+
+    .indicator-wrap {
+      display: grid;
+      justify-items: center;
+      gap: 14px;
+      padding: 12px 0 4px;
+    }
+
+    #indicator {
+      width: 320px;
+      height: 320px;
+      border-radius: 24px;
+      border: 2px solid rgba(255, 255, 255, 0.07);
+      display: grid;
+      place-items: center;
+      transition: background 0.14s ease;
+    }
+
+    #indicator.idle { background: var(--gray); }
+    #indicator.approve { background: var(--green); }
+    #indicator.reject { background: var(--red); }
+
+    #status-text {
+      font-size: 56px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: #fff;
+      text-shadow: 0 2px 16px rgba(0, 0, 0, 0.35);
+    }
+
+    .meta {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .meta-box {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      background: rgba(255, 255, 255, 0.02);
+      min-height: 76px;
+    }
+
+    .meta-label {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+    }
+
+    .meta-value {
+      font-size: 24px;
+      font-weight: 700;
+      word-break: break-word;
+    }
+
+    #midi-state {
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 6px;
+    }
+
+    #event-history {
+      margin: 12px 0 0;
+      padding-left: 18px;
+      display: grid;
+      gap: 8px;
+      max-height: 260px;
+      overflow-y: auto;
+    }
+
+    #event-history li {
+      color: #d1d5db;
+      font-size: 14px;
+      line-height: 1.35;
+    }
+
+    @media (max-width: 780px) {
+      #indicator {
+        width: 240px;
+        height: 240px;
+      }
+
+      #status-text {
+        font-size: 42px;
+      }
+
+      .meta {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <header>
+      <h1>MIDI-Approval-Controller</h1>
+      <p class="subtitle">Low notes (&lt; 60) = REJECT · High notes (&gt;= 60) = APPROVE</p>
+      <p id="midi-state">Initializing MIDI...</p>
+    </header>
+
+    <section class="panel indicator-wrap">
+      <div id="indicator" class="idle">
+        <div id="status-text">IDLE</div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="meta">
+        <div class="meta-box">
+          <div class="meta-label">MIDI Device</div>
+          <div id="midi-device" class="meta-value">-</div>
+        </div>
+        <div class="meta-box">
+          <div class="meta-label">Note Number</div>
+          <div id="note-value" class="meta-value">-</div>
+        </div>
+        <div class="meta-box">
+          <div class="meta-label">Velocity</div>
+          <div id="velocity-value" class="meta-value">-</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="meta-label">Last 10 Events</div>
+      <ol id="event-history"></ol>
+    </section>
+  </main>
+
+  <script src="renderer.js"></script>
+</body>
+</html>

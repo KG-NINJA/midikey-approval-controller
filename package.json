@@ -1,0 +1,20 @@
+{
+  "name": "midi-approval-controller",
+  "version": "1.0.0",
+  "description": "Electron app that converts MIDI keyboard input into approval decisions.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "keywords": [
+    "electron",
+    "midi",
+    "approval",
+    "controller"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "latest"
+  }
+}
